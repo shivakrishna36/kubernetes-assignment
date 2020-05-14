@@ -1,0 +1,27 @@
+master $ kubectl create secret generic db-password --from-literal=password='Kub3rn3t3sRul3s!'
+secret/db-password created
+
+
+master $ kubectl get secret db-password -o yaml
+apiVersion: v1
+data:
+  password: S3ViM3JuM3Qzc1J1bDNzIQ==
+kind: Secret
+metadata:
+  creationTimestamp: "2020-05-14T15:29:22Z"
+  name: db-password
+  namespace: default
+  resourceVersion: "7271"
+  selfLink: /api/v1/namespaces/default/secrets/db-password
+  uid: afbff954-95f7-11ea-a870-0242ac11000e
+type: Opaque
+
+master $ kubectl create -f candy-service-config.yml
+configmap/candy-service-config created
+
+master $ kubectl create -f candy-service-pod.yml
+pod/candy-service-pod created
+
+master $ kubectl get pods
+NAME                READY   STATUS    RESTARTS   AGE
+candy-service-pod   1/1     Running   0          12s

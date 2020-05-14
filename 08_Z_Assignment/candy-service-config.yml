@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: candy-service-config
+data:
+  candy:
+    peppermint.power=100000000
+    nougat-armor.strength=10
