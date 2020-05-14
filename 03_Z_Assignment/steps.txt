@@ -1,0 +1,67 @@
+master $ kubectl create namespace web
+namespace/web created
+
+
+master $ kubectl create -n=web -f nginx-pod.yml
+pod/nginx-demo created
+
+
+master $ kubectl get pods -n web
+NAME         READY   STATUS    RESTARTS   AGE
+nginx-demo   1/1     Running   0          7s
+
+
+master $ kubectl describe pod nginx -n web
+Name:               nginx-demo
+Namespace:          web
+Priority:           0
+PriorityClassName:  <none>
+Node:               node01/172.17.0.82
+Start Time:         Thu, 14 May 2020 07:37:25 +0000
+Labels:             app=nginx-app
+Annotations:        <none>
+Status:             Running
+IP:                 10.40.0.1
+Containers:
+  nginx:
+    Container ID:  docker://ba2bfe7f0011f44baa6fdde01c44ff2fdfef1bbf39ec42a3ddde7a97d6e46fdc
+    Image:         nginx
+    Image ID:      docker-pullable://nginx@sha256:404ed8de56dd47adadadf9e2641b1ba6ad5ce69abf251421f91d7601a2808ebe
+    Port:          80/TCP
+    Host Port:     0/TCP
+    Command:
+      nginx
+    Args:
+      -g
+      daemon off;
+      -q
+    State:          Running
+      Started:      Thu, 14 May 2020 07:37:28 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-7lp6c (ro)
+Conditions:
+  Type              Status
+  Initialized       True
+  Ready             True
+  ContainersReady   True
+  PodScheduled      True
+Volumes:
+  default-token-7lp6c:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-7lp6c
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute for 300s
+                 node.kubernetes.io/unreachable:NoExecute for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  63s   default-scheduler  Successfully assigned web/nginx-demo to node01
+  Normal  Pulling    63s   kubelet, node01    Pulling image "nginx"
+  Normal  Pulled     61s   kubelet, node01    Successfully pulled image "nginx"
+  Normal  Created    61s   kubelet, node01    Created container nginx
+  Normal  Started    61s   kubelet, node01    Started container nginx
