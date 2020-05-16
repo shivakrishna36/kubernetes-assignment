@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+spec:
+  selector:
+    app: pizza
+  type: NodePort
+  ports:
+    - nodePort: 30080
+      port: 80
+      targetPort: 80

@@ -1,0 +1,47 @@
+master $ vi pizza-deployment.yml
+
+master $ vi pizza-service.yml
+
+master $ kubectl create -f pizza-deployment.yml
+deployment.apps/pizza-deployment created
+
+master $ kubectl create -f pizza-service.yml
+service/auth-service created
+
+master $ kubectl get pods
+NAME                                READY   STATUS    RESTARTS   AGE
+pizza-deployment-594844f7bb-m9q88   1/1     Running   0          21s
+pizza-deployment-594844f7bb-sjpfv   1/1     Running   0          21s
+pizza-deployment-594844f7bb-vxb7t   1/1     Running   0          21s
+
+master $ curl 172.17.0.22:30080
+{
+  "description": "A list of pizza toppings.",
+  "pizzaToppings": [
+    "anchovies",
+    "artichoke",
+    "bacon",
+    "breakfast bacon",
+    "Canadian bacon",
+    "cheese",
+    "chicken",
+    "chili peppers",
+    "feta",
+    "garlic",
+    "green peppers",
+    "grilled onions",
+    "ground beef",
+    "ham",
+    "hot sauce",
+    "meatballs",
+    "mushrooms",
+    "olives",
+    "onions",
+    "pepperoni",
+    "pineapple",
+    "sausage",
+    "spinach",
+    "sun-dried tomato",
+    "tomatoes"
+  ]
+}
