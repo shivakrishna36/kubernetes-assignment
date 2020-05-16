@@ -1,0 +1,45 @@
+master $ vi candy-deployment.yml
+
+master $ kubectl create -f candy-deployment.yml
+deployment.extensions/candy-deployment created
+
+
+master $ kubectl get pods
+NAME                                READY   STATUS    RESTARTS   AGE
+candy-deployment-75b6fc9697-6b4fr   1/1     Running   0          13s
+candy-deployment-75b6fc9697-6lnts   1/1     Running   0          13s
+
+master $ kubectl apply -f candy-deployment.yml
+Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
+deployment.extensions/candy-deployment configured
+
+
+master $ kubectl rollout status deploy candy-deployment
+Waiting for deployment "candy-deployment" rollout to finish: 1 old replicas are pending termination...
+^C
+
+master $ kubectl rollout status deploy candy-deployment
+Waiting for deployment "candy-deployment" rollout to finish: 1 old replicas are pending termination...
+^C
+
+
+master $ kubectl get pods
+NAME                                READY   STATUS         RESTARTS   AGE
+candy-deployment-75b6fc9697-p5f24   1/1     Running        0          7m33s
+candy-deployment-7f59d7777b-74d5w   0/1     ErrImagePull   0          2m1s
+candy-deployment-7f59d7777b-vp5jj   0/1     ErrImagePull   0          2m1s
+
+
+master $ kubectl rollout undo deployments/candy-deployment
+deployment.extensions/candy-deployment rolled back
+
+
+master $ kubectl rollout status deploy candy-deployment
+deployment "candy-deployment" successfully rolled out
+
+
+master $ kubectl get pods
+NAME                                READY   STATUS    RESTARTS   AGE
+candy-deployment-75b6fc9697-7kn9c   1/1     Running   0          16s
+candy-deployment-75b6fc9697-p5f24   1/1     Running   0          8m54s
+
