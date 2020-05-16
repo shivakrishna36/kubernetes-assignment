@@ -1,0 +1,289 @@
+PS D:\kubernetes\assignment5> kubectl create -f .\auth-deployment.yml
+deployment.apps/auth-deployment created
+
+PS D:\kubernetes\assignment5> kubectl create -f .\auth-svc.yml
+service/auth-svc created
+
+PS D:\kubernetes\assignment5> kubectl get pods
+NAME                               READY   STATUS              RESTARTS   AGE
+auth-deployment-58f6db6996-bj5lc   0/1     ContainerCreating   0          6s
+auth-deployment-58f6db6996-z5jcs   0/1     ContainerCreating   0          6s
+
+PS D:\kubernetes\assignment5> kubectl get pods
+NAME                               READY   STATUS              RESTARTS   AGE
+auth-deployment-58f6db6996-bj5lc   0/1     ErrImagePull        0          17s
+auth-deployment-58f6db6996-z5jcs   0/1     ContainerCreating   0          17s
+
+PS D:\kubernetes\assignment5> kubectl get pods
+NAME                               READY   STATUS    RESTARTS   AGE
+auth-deployment-58f6db6996-bj5lc   1/1     Running   0          2m23s
+auth-deployment-58f6db6996-z5jcs   1/1     Running   0          2m23s
+
+PS D:\kubernetes\assignment5> kubectl describe deploy auth-deployment
+Name:                   auth-deployment
+Namespace:              default
+CreationTimestamp:      Sun, 03 May 2020 19:28:32 +0530
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=auth
+Replicas:               2 desired | 2 updated | 2 total | 2 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=auth
+  Containers:
+   nginx:
+    Image:        nginx
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   auth-deployment-58f6db6996 (2/2 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  2m29s  deployment-controller  Scaled up replica set auth-deployment-58f6db6996 to 2
+
+PS D:\kubernetes\assignment5> kubectl describe svc  auth-svc
+Name:                     auth-svc
+Namespace:                default
+Labels:                   <none>
+Annotations:              <none>
+Selector:                 app=auth
+Type:                     NodePort
+IP:                       10.99.177.5
+Port:                     <unset>  80/TCP
+TargetPort:               80/TCP
+NodePort:                 <unset>  31000/TCP
+Endpoints:                172.17.0.6:80,172.17.0.7:80
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   <none>
+
+
+
+PS D:\kubernetes\assignment5> curl http://192.168.99.100:31000
+
+
+StatusCode        : 200
+StatusDescription : OK
+Content           : <!DOCTYPE html>
+                    <html>
+                    <head>
+                    <title>Welcome to nginx!</title>
+                    <style>
+                        body {
+                            width: 35em;
+                            margin: 0 auto;
+                            font-family: Tahoma, Verdana, Arial, sans-serif;
+                        }
+                    </style>
+                    <...
+RawContent        : HTTP/1.1 200 OK
+                    Connection: keep-alive
+                    Accept-Ranges: bytes
+                    Content-Length: 612
+                    Content-Type: text/html
+                    Date: Sun, 03 May 2020 14:01:31 GMT
+                    ETag: "5e95c66e-264"
+                    Last-Modified: Tue, 14 Apr 2020 ...
+Forms             : {}
+Headers           : {[Connection, keep-alive], [Accept-Ranges, bytes], [Content-Length, 612], [Content-Type,
+                    text/html]...}
+Images            : {}
+InputFields       : {}
+Links             : {@{innerHTML=nginx.org; innerText=nginx.org; outerHTML=<A href="http://nginx.org/">nginx.org</A>;
+                    outerText=nginx.org; tagName=A; href=http://nginx.org/}, @{innerHTML=nginx.com;
+                    innerText=nginx.com; outerHTML=<A href="http://nginx.com/">nginx.com</A>; outerText=nginx.com;
+                    tagName=A; href=http://nginx.com/}}
+ParsedHtml        : System.__ComObject
+RawContentLength  : 612
+
+
+
+
+
+PS D:\kubernetes\assignment5> kubectl create -f .\data-deployment.yml
+deployment.apps/data-deployment created
+
+PS D:\kubernetes\assignment5> kubectl create -f .\data-svc.yml
+service/data-svc created
+
+PS D:\kubernetes\assignment5> kubectl get pods
+NAME                               READY   STATUS              RESTARTS   AGE
+data-deployment-5bfcdf5f6b-b8jl7   0/1     ContainerCreating   0          6s
+data-deployment-5bfcdf5f6b-bqzsm   0/1     ContainerCreating   0          6s
+data-deployment-5bfcdf5f6b-mnzf8   0/1     ContainerCreating   0          6s
+
+PS D:\kubernetes\assignment5> kubectl describe svc  data-svc
+Name:              data-svc
+Namespace:         default
+Labels:            <none>
+Annotations:       <none>
+Selector:          app=data
+Type:              ClusterIP
+IP:                10.108.82.237
+Port:              <unset>  80/TCP
+TargetPort:        8080/TCP
+Endpoints:         <none>
+Session Affinity:  None
+Events:            <none>
+PS D:\kubernetes\assignment5> kubectl describe svc  data-svc --output yaml
+Error: unknown flag: --output
+See 'kubectl describe --help' for usage.
+PS D:\kubernetes\assignment5> kubectl get svc  data-svc --output yaml
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2020-05-03T14:13:22Z"
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        f:ports:
+          .: {}
+          k:{"port":80,"protocol":"TCP"}:
+            .: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+        f:selector:
+          .: {}
+          f:app: {}
+        f:sessionAffinity: {}
+        f:type: {}
+    manager: kubectl.exe
+    operation: Update
+    time: "2020-05-03T14:13:22Z"
+  name: data-svc
+  namespace: default
+  resourceVersion: "245221"
+  selfLink: /api/v1/namespaces/default/services/data-svc
+  uid: 4ad0aa54-327f-455d-8868-91643d233bcc
+spec:
+  clusterIP: 10.108.82.237
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: data
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
+
+PS D:\kubernetes\assignment5> kubectl get pods
+NAME                               READY   STATUS    RESTARTS   AGE
+data-deployment-5bfcdf5f6b-b8jl7   1/1     Running   0          53s
+data-deployment-5bfcdf5f6b-bqzsm   1/1     Running   0          53s
+data-deployment-5bfcdf5f6b-mnzf8   1/1     Running   0          53s
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
