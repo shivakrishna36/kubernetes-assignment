@@ -1,0 +1,31 @@
+master $ vi cleanup-cronjob.yml
+
+
+master $ kubectl create -f cleanup-cronjob.yml
+cronjob.batch/cleanup-cronjob created
+
+
+master $ kubectl get cronjobs.batch cleanup-cronjob
+NAME              SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+cleanup-cronjob   */1 * * * *   False     0        <none>          55s
+
+
+master $ kubectl get jobs --watch
+NAME                         COMPLETIONS   DURATION   AGE
+cleanup-cronjob-1589708700   1/1           25s        27s
+
+^C
+
+master $ kubectl get cronjobs cleanup-cronjob
+NAME              SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+cleanup-cronjob   */1 * * * *   False     1        8s              2m4s
+
+
+master $ kubectl get jobs.batch --watchNAME                         COMPLETIONS   DURATION   AGE
+cleanup-cronjob-1589708820   1/1           2s         2m22s
+cleanup-cronjob-1589708880   1/1           1s         81s
+cleanup-cronjob-1589708940   1/1           4s         21s
+cleanup-cronjob-1589709000   0/1                      0s
+cleanup-cronjob-1589709000   0/1           0s         0s
+cleanup-cronjob-1589709000   1/1           2s         2s
+cleanup-cronjob-1589708820   1/1           2s         3m12s
